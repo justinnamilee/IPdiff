@@ -1,5 +1,6 @@
 {
   "name": "ipdiff",
+  "type": "module",
   "version": "0.1.0",
   "description": "Get IP of requester and ourselves.",
   "main": "ipdiff.js",
