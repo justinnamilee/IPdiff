@@ -27,10 +27,12 @@
     "request": 
     {
       "health": "Incoming health request from: ",
+      "health2": "Incoming full health request from: ",
       "text": "Incoming text request from: ",
       "json": "Incoming json request from: "
     },
     "site": "Refresh selecting: ",
+    "sitesep": " of ",
     "startup": "Listening on port: ",
     "textsep": "<BR><BR>",
     "them": "Your IP: ",

@@ -78,13 +78,37 @@ async function refreshMyIP() {
 // * Express router entries and such.
 
 app.get('/', (req, res) => {
+  // ? send as little back as possible on a root request
   const them = getIP(req);
   console.log(config.ui.request.health + them);
 
   res.send(config.ui.healthy);
 });
 
+app.get('/health', (req, res) => {
+  // ? send some real health information back
+  const them = getIP(req);
+  console.log(config.ui.request.health2 + them);
+
+  let count = 0;
+
+  for (const s of config.services) {
+    if ((err[s] + (config.retry * 1000)) < Date.now()) {
+      count++;
+    }
+  }
+
+  res.json({
+    'available': count,
+    'total': config.services.length,
+    'me': us,
+    'you': them,
+    'last': Math.max(...Object.keys(lut).map((k) => lut[k]))
+  });
+});
+
 app.get('/text', (req, res) => {
+  // ? crappy html response
   const them = getIP(req);
   console.log(config.ui.request.text + them);
 
@@ -92,6 +116,7 @@ app.get('/text', (req, res) => {
 });
 
 app.get('/json', (req, res) => {
+  // ? cool json response
   const them = getIP(req);
   console.log(config.ui.request.json + them);
 
