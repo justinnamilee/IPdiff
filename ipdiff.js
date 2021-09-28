@@ -50,7 +50,7 @@ async function refreshMyIP() {
   }
 
   if (typeof site !== 'undefined') {
-    const res = await fetch(site, {'headers': {'User-Agent': 'curl/7.68.0'}});
+    const res = await fetch(site, {'headers': {'User-Agent': config.agent}});
 
     if (res.status === 200) {
       const txt = await res.text();
