@@ -1,0 +1,30 @@
+{
+  "port": 6969,
+  "refresh": 60,
+  "services": 
+  [
+    "https://ifconfig.co",
+    "https://dynamicdns.park-your-domain.com/getip",
+    "https://ipinfo.io/ip",
+    "https://ifconfig.me",
+    "https://api.ipify.org"
+  ],
+  "startup": 5,
+  "timeout": 180,
+  "ui": 
+  {
+    "healthy": "Healthy, go away.",
+    "norefresh": "Failed to refresh our IP.",
+    "request": 
+    {
+      "health": "Incoming health request from: ",
+      "text": "Incoming text request from: ",
+      "json": "Incoming json request from: "
+    },
+    "site": "Selecting: ",
+    "startup": "Listening on port: ",
+    "them": "Your IP: ",
+    "update": "New IP for us: ",
+    "us": "My IP: "
+  }
+}
