@@ -41,21 +41,17 @@ async function refreshMyIP() {
   let site = undefined;
 
   for (const s of qShuffle(config.services)) {
-    if ((lut[s] + (config.timeout * 1000)) < Date.now()) {
-      if (err[s] + (config.retry * 1000) < Date.now()) {
-
-        site = s;
-        lut[s] = Date.now();
-
-        // ! console.debug(config.ui.site + s);
-
-        break;
-      }
+    if ((err[s] + (config.retry * 1000)) < Date.now() && (lut[s] + (config.timeout * 1000)) < Date.now()) {
+      site = s;
+      break;
     }
   }
 
   if (typeof site !== 'undefined') {
     const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
+
+    // ! console.debug(config.ui.site + site);
+    lut[site] = Date.now();
 
     if (res.status === 200) {
       const txt = await res.text();
