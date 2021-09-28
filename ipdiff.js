@@ -41,11 +41,11 @@ function applyRateLimit(u, l) {
       url[i].push(t);
 
       if (url[i].length > j) {
-        console.log(config.ui.limit + i);
-        limit = true;
-
         // ? keep limit lists fixed length
         url[i].splice(0, url[i].length - j);
+
+        console.log(config.ui.limit + i);
+        limit = true;
       }
     } else {
       url[i] = [t];
