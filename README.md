@@ -23,5 +23,5 @@ $ node ipdiff.js
 
 ### Usage:
 ```
-$ curl https://your-application-host.local/json
+$ curl http://your-application-host.local:6969/json
 ```
