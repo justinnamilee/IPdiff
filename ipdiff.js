@@ -86,7 +86,7 @@ app.get('/text', (req, res) => {
   const them = getIP(req);
   console.log(config.ui.request.text + them);
 
-  res.send(`${config.ui.us}${us}<BR><BR>${config.ui.them}${them}`);
+  res.send(config.ui.us + us + '<BR><BR>' + config.ui.them + them);
 });
 
 app.get('/json', (req, res) => {
