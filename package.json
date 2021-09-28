@@ -22,8 +22,6 @@
   "homepage": "https://github.com/justinnamilee/IPdiff#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "http": "^0.0.1-security",
-    "node-fetch": "^3.0.0",
-    "remove": "^0.1.5"
+    "node-fetch": "^3.0.0"
   }
 }
