@@ -10,11 +10,13 @@ import fs from 'fs';
 let us = ''; // ? storage for our IP
 const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 const lut = {};
+const err = {};
 const app = express();
 
 // ? pre-load our targets last-hit time into the lut
 for (const s of config.services) {
   lut[s] = Date.now() - (config.timeout * 1000);
+  err[s] = Date.now() - (config.retry * 1000);
 }
 
 
@@ -40,12 +42,15 @@ async function refreshMyIP() {
 
   for (const s of qShuffle(config.services)) {
     if ((lut[s] + (config.timeout * 1000)) < Date.now()) {
-      site = s;
-      lut[s] = Date.now();
+      if (err[s] + (config.retry * 1000) < Date.now()) {
 
-      // ! console.debug(config.ui.site + s);
+        site = s;
+        lut[s] = Date.now();
 
-      break;
+        // ! console.debug(config.ui.site + s);
+
+        break;
+      }
     }
   }
 
@@ -63,6 +68,7 @@ async function refreshMyIP() {
         console.log(config.ui.update + us);
       }
     } else {
+      err[site] = Date.now();
       console.error(config.ui.norefresh + site);
     }
   } else {

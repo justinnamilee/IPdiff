@@ -1,7 +1,9 @@
 {
   "agent": "curl/7.68.0",
+  "failed": 5,
   "port": 6969,
   "refresh": 60,
+  "retry": 86400,
   "services": 
   [
     "https://ifconfig.co",
