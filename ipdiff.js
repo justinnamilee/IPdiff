@@ -29,6 +29,7 @@ for (const s of config.services) {
 
 function applyRateLimit(u, l) {
   const tag = u + config.tagsep + l;
+  const t = Date.now();
   let limit = false;
 
   // ? check endpoint, then global rate limits
@@ -37,14 +38,19 @@ function applyRateLimit(u, l) {
     const j = item[1];
 
     if (i in url) {
-      url[i].last = Date.now();
+      url[i].push(t);
 
-      if (++url[i].count > j) {
+      if (url[i].length >= j) {
         console.log(config.ui.limit + i);
         limit = true;
+
+        if (url[i].length > j) {
+          // ? keep limit lists fixed length
+          url[i].splice(0, url[i].length - j);
+        }
       }
     } else {
-      url[i] = { 'count': 1, 'last': Date.now() };
+      url[i] = [t];
     }
   }
 
@@ -52,9 +58,18 @@ function applyRateLimit(u, l) {
 }
 
 function cleanRateLimit() {
+  const t = Date.now();
+
   for (const tag in url) {
-    if ((url[tag].last + (config.expire * 1000)) < Date.now()) {
-      console.log(config.ui.expire + tag);
+    let i = url[tag].length;
+
+    while (i--) {
+      if (url[tag][i] + (config.expire * 1000) < t) {
+        url[tag].splice(i, 1);
+      }
+    }
+
+    if (url[tag].length === 0) {
       delete url[tag];
     }
   }
@@ -74,10 +89,11 @@ function qShuffle(a) {
 
 async function refreshMyIP() {
   // ? every refresh period, select a random(ish) site, see if our IP is new
+  const t = Date.now();
   let site = undefined;
 
   for (const s of qShuffle(config.services)) {
-    if ((err[s] + (config.retry * 1000)) < Date.now() && (lut[s] + (config.timeout * 1000)) < Date.now()) {
+    if ((err[s] + (config.retry * 1000)) < t && (lut[s] + (config.timeout * 1000)) < t) {
       site = s;
       break;
     }
@@ -87,7 +103,7 @@ async function refreshMyIP() {
     const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
 
     // ! console.debug(config.ui.site + site);
-    lut[site] = Date.now();
+    lut[site] = t;
 
     if (res.status === 200) {
       const txt = await res.text();
@@ -100,11 +116,11 @@ async function refreshMyIP() {
         console.log(config.ui.update + us);
       }
     } else {
-      err[site] = Date.now();
-      console.error(config.ui.norefresh + site);
+      err[site] = t;
+      console.log(config.ui.norefresh + site);
     }
   } else {
-    console.error(config.ui.nosite);
+    console.log(config.ui.nosite);
   }
 }
 
@@ -134,10 +150,11 @@ app.get(config.router.health.path, (req, res) => {
   } else {
     console.log(config.ui.request.health2 + them);
 
+    const t = Date.now();
     let count = 0;
 
     for (const s of config.services) {
-      if ((err[s] + (config.retry * 1000)) < Date.now()) {
+      if ((err[s] + (config.retry * 1000)) < t) {
         count++;
       }
     }
@@ -147,7 +164,8 @@ app.get(config.router.health.path, (req, res) => {
       'total': config.services.length,
       'me': us,
       'you': them,
-      'last': Math.max(...Object.keys(lut).map((k) => lut[k]))
+      'last': Math.max(...Object.keys(lut).map((k) => lut[k])),
+      'epoch': t
     });
   }
 });

@@ -1,7 +1,7 @@
 {
   "agent": "curl/7.68.0",
   "clean": 10,
-  "expire": 180,
+  "expire": 60,
   "failed": 5,
   "limit": 30,
   "port": 6969,
