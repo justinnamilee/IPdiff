@@ -8,10 +8,15 @@
     "https://dynamicdns.park-your-domain.com/getip",
     "https://ipinfo.io/ip",
     "https://ifconfig.me",
-    "https://api.ipify.org"
+    "https://api.ipify.org",
+    "https://showip.net",
+    "https://www.wtfismyip.com/text",
+    "https://www.ifconfig.io",
+    "https://www.myexternalip.com/raw",
+    "https://ip4.top10vpn.com"
   ],
   "startup": 5,
-  "timeout": 180,
+  "timeout": 300,
   "ui": 
   {
     "healthy": "Healthy, go away.",
