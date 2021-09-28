@@ -11,12 +11,17 @@ Useful for monitoring boxes connected to VPNs for internet IP redirection.
 
 ### Install:
 ```
-git clone https://github.com/justinnamilee/IPdiff.git
-cd IPdiff
-npm install
+$ git clone https://github.com/justinnamilee/IPdiff.git
+$ cd IPdiff
+$ npm install
 ```
 
 ### Run:
 ```
-node ipdiff.js
+$ node ipdiff.js
+```
+
+### Usage:
+```
+$ curl https://your-application-host.local/json
 ```
