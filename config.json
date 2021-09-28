@@ -1,11 +1,31 @@
 {
   "agent": "curl/7.68.0",
+  "clean": 10,
+  "expire": 180,
   "failed": 5,
+  "limit": 30,
   "port": 6969,
   "refresh": 60,
   "retry": 86400,
-  "services": 
-  [
+  "router": {
+    "root": {
+      "path": "/",
+      "limit": 15
+    },
+    "health": {
+      "path": "/health",
+      "limit": 10
+    },
+    "text": {
+      "path": "/text",
+      "limit": 5
+    },
+    "json": {
+      "path": "/json",
+      "limit": 10
+    }
+  },
+  "services": [
     "https://ifconfig.co",
     "https://dynamicdns.park-your-domain.com/getip",
     "https://ipinfo.io/ip",
@@ -18,14 +38,15 @@
     "https://ip4.top10vpn.com"
   ],
   "startup": 5,
+  "tagsep": "-",
   "timeout": 300,
-  "ui": 
-  {
+  "ui": {
+    "expire": "Expiring rate limit: ",
     "healthy": "Healthy, go away.",
+    "limit": "Hit rate limit: ",
     "norefresh": "Failed to refresh our IP with: ",
     "nosite": "Failed to select a site to refresh our IP.",
-    "request": 
-    {
+    "request": {
       "health": "Incoming health request from: ",
       "health2": "Incoming full health request from: ",
       "text": "Incoming text request from: ",

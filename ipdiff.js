@@ -8,10 +8,13 @@ import fs from 'fs';
 // * Globals.
 
 let us = ''; // ? storage for our IP
+
 const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
-const lut = {};
-const err = {};
 const app = express();
+
+const lut = {}; // ? last update time
+const err = {}; // ? errors and such
+const url = {}; // ? user rate limit
 
 // ? pre-load our targets last-hit time into the lut
 for (const s of config.services) {
@@ -23,6 +26,39 @@ for (const s of config.services) {
 
 // ********************
 // * Some shenannigans.
+
+function applyRateLimit(u, l) {
+  const tag = u + config.tagsep + l;
+  let limit = false;
+
+  // ? check endpoint, then global rate limits
+  for (const item of [[tag, config.router[l].limit], [u, config.limit]]) {
+    const i = item[0];
+    const j = item[1];
+
+    if (i in url) {
+      url[i].last = Date.now();
+
+      if (++url[i].count > j) {
+        console.log(config.ui.limit + i);
+        limit = true;
+      }
+    } else {
+      url[i] = { 'count': 1, 'last': Date.now() };
+    }
+  }
+
+  return limit;
+}
+
+function cleanRateLimit() {
+  for (const tag in url) {
+    if ((url[tag].last + (config.expire * 1000)) < Date.now()) {
+      console.log(config.ui.expire + tag);
+      delete url[tag];
+    }
+  }
+}
 
 function getIP(r) {
   // ? get IP and chop off ::ffff: from IPv4 addresses
@@ -77,50 +113,67 @@ async function refreshMyIP() {
 // **********************************
 // * Express router entries and such.
 
-app.get('/', (req, res) => {
+app.get(config.router.root.path, (req, res) => {
   // ? send as little back as possible on a root request
   const them = getIP(req);
-  console.log(config.ui.request.health + them);
 
-  res.send(config.ui.healthy);
+  if (applyRateLimit(them, "root")) {
+    res.sendStatus(429);
+  } else {
+    console.log(config.ui.request.health + them);
+    res.send(config.ui.healthy);
+  }
 });
 
-app.get('/health', (req, res) => {
+app.get(config.router.health.path, (req, res) => {
   // ? send some real health information back
   const them = getIP(req);
-  console.log(config.ui.request.health2 + them);
 
-  let count = 0;
+  if (applyRateLimit(them, "health")) {
+    res.sendStatus(429);
+  } else {
+    console.log(config.ui.request.health2 + them);
 
-  for (const s of config.services) {
-    if ((err[s] + (config.retry * 1000)) < Date.now()) {
-      count++;
+    let count = 0;
+
+    for (const s of config.services) {
+      if ((err[s] + (config.retry * 1000)) < Date.now()) {
+        count++;
+      }
     }
-  }
 
-  res.json({
-    'available': count,
-    'total': config.services.length,
-    'me': us,
-    'you': them,
-    'last': Math.max(...Object.keys(lut).map((k) => lut[k]))
-  });
+    res.json({
+      'available': count,
+      'total': config.services.length,
+      'me': us,
+      'you': them,
+      'last': Math.max(...Object.keys(lut).map((k) => lut[k]))
+    });
+  }
 });
 
-app.get('/text', (req, res) => {
+app.get(config.router.text.path, (req, res) => {
   // ? crappy html response
   const them = getIP(req);
-  console.log(config.ui.request.text + them);
 
-  res.send(config.ui.us + us + config.ui.textsep + config.ui.them + them);
+  if (applyRateLimit(them, "text")) {
+    res.sendStatus(429);
+  } else {
+    console.log(config.ui.request.text + them);
+    res.send(config.ui.us + us + config.ui.textsep + config.ui.them + them);
+  }
 });
 
-app.get('/json', (req, res) => {
+app.get(config.router.json.path, (req, res) => {
   // ? cool json response
   const them = getIP(req);
-  console.log(config.ui.request.json + them);
 
-  res.json({ 'me': us, 'you': them });
+  if (applyRateLimit(them, "json")) {
+    res.sendStatus(429);
+  } else {
+    console.log(config.ui.request.json + them);
+    res.json({ 'me': us, 'you': them });
+  }
 });
 
 app.listen(config.port, () => {
@@ -131,6 +184,8 @@ app.listen(config.port, () => {
 
 // **************************
 // * Interval and start call.
+
+setInterval(cleanRateLimit, (config.clean * 1000));
 
 setInterval(refreshMyIP, (config.refresh * 1000));
 setTimeout(refreshMyIP, (config.startup * 1000));
