@@ -14,14 +14,15 @@
   "ui": 
   {
     "healthy": "Healthy, go away.",
-    "norefresh": "Failed to refresh our IP.",
+    "norefresh": "Failed to refresh our IP with: ",
+    "nosite": "Failed to select a site to refresh our IP.",
     "request": 
     {
       "health": "Incoming health request from: ",
       "text": "Incoming text request from: ",
       "json": "Incoming json request from: "
     },
-    "site": "Selecting: ",
+    "site": "Refresh selecting: ",
     "startup": "Listening on port: ",
     "them": "Your IP: ",
     "update": "New IP for us: ",

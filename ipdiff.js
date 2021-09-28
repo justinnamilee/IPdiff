@@ -7,7 +7,7 @@ import fs from 'fs';
 // **********
 // * Globals.
 
-let us = '';
+let us = ''; // ? storage for our IP
 const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 const lut = {};
 const app = express();
@@ -22,17 +22,20 @@ for (const s of config.services) {
 // ********************
 // * Some shenannigans.
 
-function getIPv4(r) {
+function getIP(r) {
+  // ? get IP and chop off ::ffff: from IPv4 addresses
   return (r.headers['x-forwarded-for'] || r.ip).replace('::ffff:', '');
 }
 
 function qShuffle(a) {
+  // ? ask me no questions, I will tell you no lies
   return a.map((value) => ({ value, sort: Math.random() }))
           .sort((a, b) => a.sort - b.sort)
           .map(({ value }) => value)
 }
 
 async function refreshMyIP() {
+  // ? every refresh period, select a random(ish) site, see if our IP is new
   let site = undefined;
 
   for (const s of qShuffle(config.services)) {
@@ -48,17 +51,22 @@ async function refreshMyIP() {
 
   if (typeof site !== 'undefined') {
     const res = await fetch(site, {'headers': {'User-Agent': 'curl/7.68.0'}});
-    const txt = await res.text();
-    const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
 
-    // TODO: add check for non-200 return
+    if (res.status === 200) {
+      const txt = await res.text();
+      const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
 
-    if (us !== newUs) {
-      us = newUs;
-      console.log(config.ui.update + us);
+      if (us !== newUs) {
+        us = newUs;
+
+        console.log(config.ui.site + site);
+        console.log(config.ui.update + us);
+      }
+    } else {
+      console.error(config.ui.norefresh + site);
     }
   } else {
-    console.error(config.ui.norefresh);
+    console.error(config.ui.nosite);
   }
 }
 
@@ -68,21 +76,21 @@ async function refreshMyIP() {
 // * Express router entries and such.
 
 app.get('/', (req, res) => {
-  const them = getIPv4(req);
+  const them = getIP(req);
   console.log(config.ui.request.health + them);
 
   res.send(config.ui.healthy);
 });
 
 app.get('/text', (req, res) => {
-  const them = getIPv4(req);
+  const them = getIP(req);
   console.log(config.ui.request.text + them);
 
   res.send(`${config.ui.us}${us}<BR><BR>${config.ui.them}${them}`);
 });
 
 app.get('/json', (req, res) => {
-  const them = getIPv4(req);
+  const them = getIP(req);
   console.log(config.ui.request.json + them);
 
   res.json({'me': us, 'you': them});
@@ -94,8 +102,8 @@ app.listen(config.port, () => {
 
 
 
-// ****************************
-// * Intervals and start calls.
+// **************************
+// * Interval and start call.
 
 setInterval(refreshMyIP, (config.refresh * 1000));
 setTimeout(refreshMyIP, (config.startup * 1000));
