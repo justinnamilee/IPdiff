@@ -9,14 +9,14 @@ Useful for monitoring boxes connected to VPNs for internet IP redirection.
 
 ## How to!
 
-### Install.
+### Install:
 ```
 git clone https://github.com/justinnamilee/IPdiff.git
 cd IPdiff
 npm install
 ```
 
-### Run.
+### Run:
 ```
 node ipdiff.js
 ```
