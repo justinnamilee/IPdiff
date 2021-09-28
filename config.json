@@ -25,6 +25,7 @@
     },
     "site": "Refresh selecting: ",
     "startup": "Listening on port: ",
+    "textsep": "<BR><BR>",
     "them": "Your IP: ",
     "update": "New IP for us: ",
     "us": "My IP: "
