@@ -30,8 +30,8 @@ function getIP(r) {
 function qShuffle(a) {
   // ? ask me no questions, I will tell you no lies
   return a.map((value) => ({ value, sort: Math.random() }))
-          .sort((a, b) => a.sort - b.sort)
-          .map(({ value }) => value)
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value)
 }
 
 async function refreshMyIP() {
@@ -50,7 +50,7 @@ async function refreshMyIP() {
   }
 
   if (typeof site !== 'undefined') {
-    const res = await fetch(site, {'headers': {'User-Agent': config.agent}});
+    const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
 
     if (res.status === 200) {
       const txt = await res.text();
@@ -86,14 +86,14 @@ app.get('/text', (req, res) => {
   const them = getIP(req);
   console.log(config.ui.request.text + them);
 
-  res.send(config.ui.us + us + '<BR><BR>' + config.ui.them + them);
+  res.send(config.ui.us + us + config.ui.textsep + config.ui.them + them);
 });
 
 app.get('/json', (req, res) => {
   const them = getIP(req);
   console.log(config.ui.request.json + them);
 
-  res.json({'me': us, 'you': them});
+  res.json({ 'me': us, 'you': them });
 });
 
 app.listen(config.port, () => {
