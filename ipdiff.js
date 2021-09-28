@@ -19,38 +19,12 @@ for (const s of config.services) {
 
 
 
-// **********************************
-// * Express router entries and such.
+// ********************
+// * Some shenannigans.
 
-app.get('/', (req, res) => {
-  const them = req.headers['x-forwarded-for'] || req.ip;
-  console.log(config.ui.request.health + them);
-
-  res.send(config.ui.healthy);
-});
-
-app.get('/text', (req, res) => {
-  const them = req.headers['x-forwarded-for'] || req.ip;
-  console.log(config.ui.request.text + them);
-
-  res.send(`${config.ui.us}${us}<BR><BR>${config.ui.them}${them}`);
-});
-
-app.get('/json', (req, res) => {
-  const them = req.headers['x-forwarded-for'] || req.ip;
-  console.log(config.ui.request.json + them);
-
-  res.json({'me': us, 'you': them});
-});
-
-app.listen(config.port, () => {
-  console.log(config.ui.startup + config.port);
-});
-
-
-
-// *********************
-// * Other shenannigans.
+function getIPv4(r) {
+  return (r.headers['x-forwarded-for'] || r.ip).replace('::ffff:', '');
+}
 
 function qShuffle(a) {
   return a.map((value) => ({ value, sort: Math.random() }))
@@ -87,6 +61,36 @@ async function refreshMyIP() {
     console.error(config.ui.norefresh);
   }
 }
+
+
+
+// **********************************
+// * Express router entries and such.
+
+app.get('/', (req, res) => {
+  const them = getIPv4(req);
+  console.log(config.ui.request.health + them);
+
+  res.send(config.ui.healthy);
+});
+
+app.get('/text', (req, res) => {
+  const them = getIPv4(req);
+  console.log(config.ui.request.text + them);
+
+  res.send(`${config.ui.us}${us}<BR><BR>${config.ui.them}${them}`);
+});
+
+app.get('/json', (req, res) => {
+  const them = getIPv4(req);
+  console.log(config.ui.request.json + them);
+
+  res.json({'me': us, 'you': them});
+});
+
+app.listen(config.port, () => {
+  console.log(config.ui.startup + config.port);
+});
 
 
 
