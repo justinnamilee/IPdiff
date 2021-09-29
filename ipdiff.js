@@ -117,12 +117,13 @@ async function refreshMyIP() {
         }
       } else {
         err[site] = t;
+
         console.log(config.ui.norefresh + site);
       }
     } catch (e) {
       err[site] = t;
-      console.log(config.ui.nobueno + site);
 
+      console.log(config.ui.nobueno + site);
       console.error(e.message);
     }
   } else {
