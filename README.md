@@ -33,24 +33,28 @@ $ curl http://your-application-host.local:6969/json
 ```
 - Provides a basic health line to let you know it's working.
 
+---
 
 ```
 /health
 ```
 - Returns a full json health status.
 
+---
 
 ```
 /text
 ```
 - Returns the service's external IP and the requester's IP in text/html format (for some reason).
 
+---
 
 ```
 /json
 ```
 - Returns the service's external IP and the requester's IP in json format.
 
+---
 
 ```
 /ip
