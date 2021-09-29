@@ -11,6 +11,7 @@ let us = ''; // ? storage for our IP
 
 const app = express();
 const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
+const start = Date.now();
 console.log(config.ui.hello);
 
 const lut = {}; // ? last update time
@@ -19,8 +20,8 @@ const url = {}; // ? user rate limit
 
 // ? pre-load our targets last-hit time into the lut
 for (const s of config.services) {
-  lut[s] = Date.now() - (config.timeout * 1000);
-  err[s] = Date.now() - (config.retry * 1000);
+  lut[s] = start - (config.timeout * 1000);
+  err[s] = start - (config.retry * 1000);
 }
 
 
@@ -171,8 +172,9 @@ app.get(config.router.health.path, (req, res) => {
       'total': config.services.length,
       'me': us,
       'you': them,
-      'last': Math.max(...Object.keys(lut).map((k) => lut[k])),
-      'epoch': t
+      'now': t,
+      'refreshed': Math.max(...Object.keys(lut).map((k) => lut[k])),
+      'uptime': t - start
     });
   }
 });
