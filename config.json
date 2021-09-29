@@ -3,30 +3,30 @@
   "clean": 10,
   "expire": 180,
   "failed": 5,
-  "limit": 30,
+  "limit": 15,
   "port": 6969,
   "refresh": 60,
   "retry": 86400,
   "router": {
     "root": {
       "path": "/",
-      "limit": 15
+      "limit": 10
     },
     "health": {
       "path": "/health",
-      "limit": 10
+      "limit": 5
     },
     "text": {
       "path": "/text",
-      "limit": 5
+      "limit": 3
     },
     "json": {
       "path": "/json",
-      "limit": 10
+      "limit": 5
     },
     "ip": {
       "path": "/ip",
-      "limit": 10
+      "limit": 5
     }
   },
   "services": [
