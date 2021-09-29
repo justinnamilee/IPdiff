@@ -123,7 +123,7 @@ async function refreshMyIP() {
       err[site] = t;
       console.log(config.ui.norefresh + site);
 
-      throw e;
+      console.error(e.message);
     }
   } else {
     console.log(config.ui.nosite);
