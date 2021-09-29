@@ -121,7 +121,7 @@ async function refreshMyIP() {
       }
     } catch (e) {
       err[site] = t;
-      console.log(config.ui.norefresh + site);
+      console.log(config.ui.nobueno + site);
 
       console.error(e.message);
     }
