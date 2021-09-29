@@ -201,6 +201,19 @@ app.get(config.router.json.path, (req, res) => {
   }
 });
 
+app.get(config.router.ip.path, (req, res) => {
+  // ? cool json response
+  const them = getIP(req);
+
+  if (applyRateLimit(them, "ip")) {
+    res.sendStatus(429);
+  } else {
+    console.log(config.ui.request.ip + them);
+    res.contentType('text/plain');
+    res.send(them);
+  }
+});
+
 app.listen(config.port, () => {
   console.log(config.ui.startup + config.port);
 });

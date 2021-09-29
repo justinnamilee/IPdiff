@@ -23,6 +23,10 @@
     "json": {
       "path": "/json",
       "limit": 10
+    },
+    "ip": {
+      "path": "/ip",
+      "limit": 10
     }
   },
   "services": [
@@ -52,7 +56,8 @@
       "health": "Incoming health request from: ",
       "health2": "Incoming full health request from: ",
       "text": "Incoming text request from: ",
-      "json": "Incoming json request from: "
+      "json": "Incoming json request from: ",
+      "ip": "Incoming ip request from : "
     },
     "site": "Refresh selecting: ",
     "sitesep": " of ",
