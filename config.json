@@ -43,6 +43,7 @@
   "ui": {
     "expire": "Expiring rate limit: ",
     "healthy": "Healthy, go away.",
+    "hello": "Starting IPdiff v1.0.0!",
     "limit": "Hit rate limit: ",
     "norefresh": "Failed to refresh our IP with: ",
     "nosite": "Failed to select a site to refresh our IP.",

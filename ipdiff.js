@@ -9,8 +9,9 @@ import fs from 'fs';
 
 let us = ''; // ? storage for our IP
 
-const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 const app = express();
+const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
+console.log(config.ui.hello);
 
 const lut = {}; // ? last update time
 const err = {}; // ? errors and such
