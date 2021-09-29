@@ -99,24 +99,31 @@ async function refreshMyIP() {
   }
 
   if (typeof site !== 'undefined') {
-    const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
+    try {
+      const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
 
-    // ! console.debug(config.ui.site + site);
-    lut[site] = t;
+      // ! console.debug(config.ui.site + site);
+      lut[site] = t;
 
-    if (res.status === 200) {
-      const txt = await res.text();
-      const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
+      if (res.status === 200) {
+        const txt = await res.text();
+        const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
 
-      if (us !== newUs) {
-        us = newUs;
+        if (us !== newUs) {
+          us = newUs;
 
-        console.log(config.ui.site + site);
-        console.log(config.ui.update + us);
+          console.log(config.ui.site + site);
+          console.log(config.ui.update + us);
+        }
+      } else {
+        err[site] = t;
+        console.log(config.ui.norefresh + site);
       }
-    } else {
+    } catch (e) {
       err[site] = t;
       console.log(config.ui.norefresh + site);
+
+      throw e;
     }
   } else {
     console.log(config.ui.nosite);
