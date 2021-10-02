@@ -8,10 +8,12 @@ import fs from 'fs';
 // * Globals.
 
 let us = ''; // ? storage for our IP
+let hit = 0; // ? storage for our hit counter
 
 const app = express();
 const config = JSON.parse(fs.readFileSync('config.json', 'utf-8'));
 const start = Date.now();
+
 console.log(config.ui.hello);
 
 const lut = {}; // ? last update time
@@ -33,6 +35,9 @@ function applyRateLimit(u, l) {
   const tag = u + config.tagsep + l;
   const t = Date.now();
   let limit = false;
+
+  // ? always increment the global hit counter
+  hit++;
 
   // ? check endpoint, then global rate limits
   for (const item of [[tag, config.router[l].limit], [u, config.limit]]) {
@@ -173,6 +178,7 @@ app.get(config.router.health.path, (req, res) => {
       'me': us,
       'you': them,
       'now': t,
+      'hit': hit,
       'refreshed': Math.max(...Object.keys(lut).map((k) => lut[k])),
       'uptime': t - start
     });
