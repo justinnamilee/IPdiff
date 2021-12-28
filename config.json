@@ -7,6 +7,7 @@
   "port": 6969,
   "refresh": 60,
   "retry": 86400,
+  "gateway": "10.96.67.1",
   "router": {
     "root": {
       "path": "/",
@@ -46,6 +47,7 @@
   "timeout": 300,
   "ui": {
     "expire": "Expiring rate limit: ",
+    "gateway": "Remote gateway is down: ",
     "healthy": "Healthy, go away.",
     "hello": "Starting IPdiff v1.0.0!",
     "limit": "Hit rate limit: ",

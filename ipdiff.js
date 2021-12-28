@@ -1,6 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import fs from 'fs';
+import { execSync } from 'child_process';
 
 
 
@@ -80,6 +81,25 @@ function cleanRateLimit() {
   }
 }
 
+
+
+// *****
+// * core functions
+
+function checkGateway() {
+  let ret = false;
+
+  try {
+    execSync(`ping -c 1 "${config.gateway}"`, { timeout: 2000 });
+    ret = true;
+  }
+  catch (err) {
+    console.error(config.ui.gateway + err);
+  }
+
+  return ret;
+}
+
 function getIP(r) {
   // ? get IP and chop off ::ffff: from IPv4 addresses
   return (r.headers['x-forwarded-for'] || r.ip).replace('::ffff:', '');
@@ -93,47 +113,51 @@ function qShuffle(a) {
 }
 
 async function refreshMyIP() {
-  // ? every refresh period, select a random(ish) site, see if our IP is new
-  const t = Date.now();
-  let site = undefined;
+  // ? before we start, check if we can ping our remote gateway
+  if (checkGateway()) {
 
-  for (const s of qShuffle(config.services)) {
-    if ((err[s] + (config.retry * 1000)) < t && (lut[s] + (config.timeout * 1000)) < t) {
-      site = s;
-      break;
+    // ? every refresh period, select a random(ish) site, see if our IP is new
+    const t = Date.now();
+    let site = undefined;
+
+    for (const s of qShuffle(config.services)) {
+      if ((err[s] + (config.retry * 1000)) < t && (lut[s] + (config.timeout * 1000)) < t) {
+        site = s;
+        break;
+      }
     }
-  }
 
-  if (typeof site !== 'undefined') {
-    try {
-      const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
+    if (typeof site !== 'undefined') {
+      try {
+        const res = await fetch(site, { 'headers': { 'User-Agent': config.agent } });
 
-      // ! console.debug(config.ui.site + site);
-      lut[site] = t;
+        // ! console.debug(config.ui.site + site);
+        lut[site] = t;
 
-      if (res.status === 200) {
-        const txt = await res.text();
-        const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
+        if (res.status === 200) {
+          const txt = await res.text();
+          const newUs = txt.replace(/[^\u0020-\u007E]/g, '');
 
-        if (us !== newUs) {
-          us = newUs;
+          if (us !== newUs) {
+            us = newUs;
 
-          console.log(config.ui.site + site);
-          console.log(config.ui.update + us);
+            console.log(config.ui.site + site);
+            console.log(config.ui.update + us);
+          }
+        } else {
+          err[site] = t;
+
+          console.log(config.ui.norefresh + site);
         }
-      } else {
+      } catch (e) {
         err[site] = t;
 
-        console.log(config.ui.norefresh + site);
+        console.log(config.ui.nobueno + site);
+        console.error(e.message);
       }
-    } catch (e) {
-      err[site] = t;
-
-      console.log(config.ui.nobueno + site);
-      console.error(e.message);
+    } else {
+      console.log(config.ui.nosite);
     }
-  } else {
-    console.log(config.ui.nosite);
   }
 }
 
