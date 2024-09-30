@@ -33,30 +33,35 @@ for (const s of config.services) {
 // * Some shenannigans.
 
 function applyRateLimit(u, l) {
-  const tag = u + config.tagsep + l;
-  const t = Date.now();
   let limit = false;
 
-  // ? always increment the global hit counter
-  hit++;
+  if (u !== us)
+  {
+    // ? only limit requests that are not from ourselves (we're nice)
+    const tag = u + config.tagsep + l;
+    const t = Date.now();
 
-  // ? check endpoint, then global rate limits
-  for (const item of [[tag, config.router[l].limit], [u, config.limit]]) {
-    const i = item[0];
-    const j = item[1];
+    // ? always increment the global hit counter
+    hit++;
 
-    if (i in url) {
-      url[i].push(t);
+    // ? check endpoint, then global rate limits
+    for (const item of [[tag, config.router[l].limit], [u, config.limit]]) {
+      const i = item[0];
+      const j = item[1];
 
-      if (url[i].length > j) {
-        // ? keep limit lists fixed length
-        url[i].splice(0, url[i].length - j);
+      if (i in url) {
+        url[i].push(t);
 
-        console.log(config.ui.limit + i);
-        limit = true;
+        if (url[i].length > j) {
+          // ? keep limit lists fixed length
+          url[i].splice(0, url[i].length - j);
+
+          console.log(config.ui.limit + i);
+          limit = true;
+        }
+      } else {
+        url[i] = [t];
       }
-    } else {
-      url[i] = [t];
     }
   }
 
