@@ -9,7 +9,7 @@
   "retry": 86400,                     // how long is the site failure cooldown, in seconds
   "refresh": 60,                      // how often do we refresh our IP with the sites
   "port": 6969,                       // what port should we run on
-  "gateway": "10.96.67.1",            // what external IP should be tested for internet connectivity
+  "gateway": "1.0.0.1",               // what external IP should be tested for internet connectivity
   "router": {
     "root": {                         // root path (don't change) + rate limit count
       "path": "/",
@@ -51,7 +51,7 @@
     "expire": "Expiring rate limit: ",
     "gateway": "Remote gateway is down: ",
     "healthy": "Healthy, go away.",
-    "hello": "Starting IPdiff v1.0.0!",
+    "hello": "Starting IPdiff...",
     "limit": "Hit rate limit: ",
     "nobueno": "Failed to access: ",
     "norefresh": "Failed to refresh our IP with: ",
