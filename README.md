@@ -27,7 +27,7 @@
 ## Features
 
 * 📦 **Minimal dependencies** (just Node.js, `Express`, and `node-fetch`)
-* 🔄 Multiple output formats: JSON, HTML/text, or plain IP
+* 🔄 Multiple output formats: JSON, HTML/text, or plain-text
 * 🚦 Built-in rate limiting per endpoint
 * 🛡️ Health check with full JSON status
 * 🔁 Configurable external IP services & intervals
