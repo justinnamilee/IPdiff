@@ -175,10 +175,12 @@ By default, it binds to the port in your `config.json`.
 ## Examples
 
 ```bash
+
 curl http://localhost:6969/json
 ```
 
 ```json
+
 {
   "me": "203.0.113.42",
   "you": "198.51.100.24"
