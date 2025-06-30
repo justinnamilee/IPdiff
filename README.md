@@ -59,23 +59,23 @@ npm install
 ```jsonc
 
 {
-  "agent":  "curl/7.68.0",        // User-Agent for external queries
+  "agent":   "curl/7.68.0",       // User-Agent for external queries
   "clean":   10,                  // Rate-limit cache clean interval (s)
-  "expire": 180,                  // Rate-limit window size (s)
-  "limit":  15,                   // Global max requests per window
+  "expire":  180,                 // Rate-limit window size (s)
+  "limit":   15,                  // Global max requests per window
   "failed":  5,                   // Max failures before cooldown
-  "retry": 86400,                 // Failure cooldown duration (s)
+  "retry":   86400,               // Failure cooldown duration (s)
   "refresh": 60,                  // IP refresh interval (s)
-  "port":   6969,                 // HTTP server port
-  "gateway":"1.0.0.1",            // IP used to verify connectivity
-  "router": {
+  "port":    6969,                // HTTP server port
+  "gateway": "1.0.0.1",           // IP used to verify connectivity
+  "router": {                     // See below for router section
     "root":   { "path": "/",       "limit": 10 },
     "health": { "path": "/health", "limit":  5 },
     "text":   { "path": "/text",   "limit":  3 },
     "json":   { "path": "/json",   "limit":  5 },
     "ip":     { "path": "/ip",     "limit":  5 }
   },
-  "services": [
+  "services": [                   // Sites we hit to get our own IP
     "https://ifconfig.co",
     "https://dynamicdns.park-your-domain.com/getip",
     "https://ipinfo.io/ip",
@@ -87,9 +87,9 @@ npm install
     "https://www.myexternalip.com/raw",
     "https://ip4.top10vpn.com"
   ],
-  "startup":  5,                  // Delay before first IP check (s)
+  "startup": 5,                   // Delay before first IP check (s)
   "tagsep":  "-",                 // Internal tag separator
-  "timeout":300,                  // Site reuse cooldown (s)
+  "timeout": 300,                 // Site reuse cooldown (s)
   "ui": {
     "expire":    "Expiring rate limit: ",
     "gateway":   "Remote gateway is down: ",
@@ -100,19 +100,19 @@ npm install
     "norefresh": "Failed to refresh our IP with: ",
     "nosite":    "Failed to select a site to refresh our IP.",
     "request": {
-      "health": "Incoming health request from: ",
-      "health2":"Incoming full health request from: ",
-      "text":   "Incoming text request from: ",
-      "json":   "Incoming json request from: ",
-      "ip":     "Incoming ip request from: "
+      "health":  "Incoming health request from: ",
+      "health2": "Incoming full health request from: ",
+      "text":    "Incoming text request from: ",
+      "json":    "Incoming json request from: ",
+      "ip":      "Incoming ip request from: "
     },
-    "site":    "Refresh selecting: ",
-    "sitesep": " of ",
-    "startup": "Listening on port: ",
-    "textsep": "\n",
-    "them":    "Your IP: ",
-    "update":  "New IP for us: ",
-    "us":      "My IP: "
+    "site":      "Refresh selecting: ",
+    "sitesep":   " of ",
+    "startup":   "Listening on port: ",
+    "textsep":   "\n",
+    "them":      "Your IP: ",
+    "update":    "New IP for us: ",
+    "us":        "My IP: "
   }
 }
 ```
@@ -144,7 +144,7 @@ npm install
 | `json`   | `/json`   | 5     |
 | `ip`     | `/ip`     | 5     |
 
-> Note: The *Limit* is the rate-limit for that end-point.
+> Note: The *Limit* is the rate-limit for that endpoint.
 
 ---
 
