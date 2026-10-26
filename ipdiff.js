@@ -1,7 +1,5 @@
 import express from 'express';
-import fetch from 'node-fetch';
 import fs from 'fs';
-import { execSync } from 'child_process';
 
 
 
@@ -91,12 +89,17 @@ function cleanRateLimit() {
 // *****
 // * core functions
 
-function checkGateway() {
+async function checkGateway() {
   let ret = false;
 
   try {
-    execSync(`ping -c 1 "${config.gateway}"`, { timeout: 2000 });
-    ret = true;
+    const response = await fetch(config.gateway, {
+      signal: AbortSignal.timeout(2500),
+      cache: 'no-store'
+    });
+
+    await response.body?.cancel();
+    ret = response.ok;
   }
   catch (err) {
     console.error(config.ui.gateway + err);
@@ -119,7 +122,7 @@ function qShuffle(a) {
 
 async function refreshMyIP() {
   // ? before we start, check if we can ping our remote gateway
-  if (checkGateway()) {
+  if (await checkGateway()) {
 
     // ? every refresh period, select a random(ish) site, see if our IP is new
     const t = Date.now();

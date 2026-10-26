@@ -60,7 +60,7 @@ cp config-EXAMPLE.json config.json
   "retry":   86400,               // Failure cooldown duration (s)
   "refresh": 60,                  // IP refresh interval (s)
   "port":    6969,                // HTTP server port
-  "gateway": "1.0.0.1",           // IP used to verify connectivity
+  "gateway": "https://google.com" // Valid URL to verify gateway is up
   "router": {                     // See below for router section
     "root":   { "path": "/",       "limit": 10 },
     "health": { "path": "/health", "limit":  5 },
