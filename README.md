@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/github/license/justinnamilee/IPdiff)](LICENSE)
-![Node](https://img.shields.io/badge/Node.js-18.17.1-339933)
+![Node](https://img.shields.io/badge/Node.js-24.22.1-339933)
 
 # IPdiff
 
@@ -10,7 +10,6 @@
 ## Table of Contents
 
 * [Features](#features)
-* [Prerequisites](#prerequisites)
 * [Installation](#installation)
 * [Configuration](#configuration)
   * [Example `config.json`](#example-configjson)
@@ -26,18 +25,11 @@
 
 ## Features
 
-* 📦 **Minimal dependencies** (just Node.js, `Express`, and `node-fetch`)
-* 🔄 Multiple output formats: JSON, HTML/text, or plain-text
-* 🚦 Built-in rate limiting per endpoint
-* 🛡️ Health check with full JSON status
-* 🔁 Configurable external IP services & intervals
-
----
-
-## Prerequisites
-
-* Node.js ≥ 12.x, probably?
-* npm ≥ 6.x, also probably?
+* **Minimal dependencies** (just Node.js, `Express`, and `node-fetch`)
+* Multiple output formats: JSON, HTML/text, or plain-text
+* Built-in rate limiting per endpoint
+* Health check with full JSON status
+* Configurable external IP services & intervals
 
 ---
 
@@ -48,6 +40,7 @@
 git clone https://github.com/justinnamilee/IPdiff.git
 cd IPdiff
 npm install
+cp config-EXAMPLE.json config.json
 ```
 
 ---
@@ -192,11 +185,13 @@ curl http://localhost:6969/json
 ## Contributing
 
 1. Probably just open an issue or something.
-2. ???
-3. Profit.
+1. Ensure it has enough detail to be helpful, or explain what you want added.
+1. ???
+1. Profit.
 
 ---
 
 ## License
 
 GPLv3 © [justinnamilee](https://github.com/justinnamilee)
+
