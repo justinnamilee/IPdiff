@@ -52,16 +52,16 @@ cp config-EXAMPLE.json config.json
 ```jsonc
 
 {
-  "agent":   "curl/7.68.0",       // User-Agent for external queries
-  "clean":   10,                  // Rate-limit cache clean interval (s)
-  "expire":  180,                 // Rate-limit window size (s)
-  "limit":   15,                  // Global max requests per window
-  "failed":  5,                   // Max failures before cooldown
-  "retry":   86400,               // Failure cooldown duration (s)
-  "refresh": 60,                  // IP refresh interval (s)
-  "port":    6969,                // HTTP server port
-  "gateway": "https://google.com" // Valid URL to verify gateway is up
-  "router": {                     // See below for router section
+  "agent":   "curl/7.68.0",        // User-Agent for external queries
+  "clean":   10,                   // Rate-limit cache clean interval (s)
+  "expire":  180,                  // Rate-limit window size (s)
+  "limit":   15,                   // Global max requests per window
+  "failed":  5,                    // Max failures before cooldown
+  "retry":   86400,                // Failure cooldown duration (s)
+  "refresh": 60,                   // IP refresh interval (s)
+  "port":    6969,                 // HTTP server port
+  "gateway": "https://google.com", // Valid URL to verify gateway is up
+  "router": {                      // See below for router section
     "root":   { "path": "/",       "limit": 10 },
     "health": { "path": "/health", "limit":  5 },
     "text":   { "path": "/text",   "limit":  3 },
