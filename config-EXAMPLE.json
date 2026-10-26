@@ -1,0 +1,72 @@
+{
+  "agent": "curl/7.68.0",
+  "clean": 10,
+  "expire": 180,
+  "failed": 5,
+  "limit": 15,
+  "port": 6969,
+  "refresh": 60,
+  "retry": 86400,
+  "gateway": "1.0.0.1",
+  "router": {
+    "root": {
+      "path": "/",
+      "limit": 10
+    },
+    "health": {
+      "path": "/health",
+      "limit": 5
+    },
+    "text": {
+      "path": "/text",
+      "limit": 3
+    },
+    "json": {
+      "path": "/json",
+      "limit": 5
+    },
+    "ip": {
+      "path": "/ip",
+      "limit": 5
+    }
+  },
+  "services": [
+    "https://ifconfig.co",
+    "https://dynamicdns.park-your-domain.com/getip",
+    "https://ipinfo.io/ip",
+    "https://ifconfig.me",
+    "https://api.ipify.org",
+    "https://showip.net",
+    "https://www.wtfismyip.com/text",
+    "https://www.ifconfig.io",
+    "https://www.myexternalip.com/raw",
+    "https://ip4.top10vpn.com"
+  ],
+  "startup": 5,
+  "tagsep": "-",
+  "timeout": 300,
+  "ui": {
+    "expire": "Expiring rate limit: ",
+    "gateway": "Remote gateway is down: ",
+    "healthy": "Healthy, go away.",
+    "hello": "Starting IPdiff...",
+    "limit": "Hit rate limit: ",
+    "nobueno": "Failed to access: ",
+    "norefresh": "Failed to refresh our IP with: ",
+    "nosite": "Failed to select a site to refresh our IP.",
+    "request": {
+      "health": "Incoming health request from: ",
+      "health2": "Incoming full health request from: ",
+      "text": "Incoming text request from: ",
+      "json": "Incoming json request from: ",
+      "ip": "Incoming ip request from : "
+    },
+    "site": "Refresh selecting: ",
+    "sitesep": " of ",
+    "startup": "Listening on port: ",
+    "textsep": "<BR><BR>",
+    "them": "Your IP: ",
+    "update": "New IP for us: ",
+    "us": "My IP: "
+  }
+}
